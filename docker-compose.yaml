@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  pdi-kitchen:
+    build: .
+    image: rafaelszp/pdi-ce${PDI_IMAGE_TAG}
+    hostname: ${SERVER_HOST}
+    container_name: ${PDI_CONTAINER_NAME}
+    entrypoint: ['/pdi/data-integration/kitchen.sh', '-logfile','/pdi/logs/pdi.log']
+    environment: 
+      - JAVA_OPTIONS=${JAVA_OPTIONS}
+      - PENTAHO_DI_JAVA_OPTIONS=${JAVA_OPTIONS}
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+    volumes:
+      - ./jobs:/pdi/jobs
+      - ./logs:/pdi/logs:rw
+      
